@@ -171,6 +171,14 @@
     });
   }
 
+  function debounce(fn, wait){
+    let t;
+    return function(...args){
+      clearTimeout(t);
+      t = setTimeout(()=> fn.apply(this,args), wait);
+    };
+  }
+
   function setFilter(f, scroll){
     currentFilter = f;
     render();
@@ -182,26 +190,43 @@
     btn.addEventListener('click', ()=> setFilter(btn.dataset.filter, true));
   });
 
-  // Quitar filtro (barra activa)
-  document.getElementById('filter-bar-clear').addEventListener('click', ()=>{
-    currentQuery=''; currentCity='';
-    document.getElementById('search-text').value='';
-    document.getElementById('search-city').value='';
-    setFilter('todas', false);
-  });
+  const elFilterClear = document.getElementById('filter-bar-clear');
+  const elSearchText = document.getElementById('search-text');
+  const elSearchCity = document.getElementById('search-city');
+  const elBtnSearch = document.getElementById('btn-search');
+  const elResultados = document.getElementById('resultados');
 
-  // Buscador del hero
-  document.getElementById('btn-search').addEventListener('click', ()=>{
-    currentQuery = document.getElementById('search-text').value.trim();
-    currentCity = document.getElementById('search-city').value.trim();
+  function runSearch(scroll){
+    currentQuery = elSearchText ? elSearchText.value.trim() : '';
+    currentCity = elSearchCity ? elSearchCity.value.trim() : '';
     render();
-    document.getElementById('resultados').scrollIntoView({behavior:'smooth', block:'nearest'});
-  });
-  ['search-text','search-city'].forEach(id=>{
-    document.getElementById(id).addEventListener('keydown', e=>{
-      if(e.key === 'Enter'){ document.getElementById('btn-search').click(); }
+    if(scroll && elResultados){ elResultados.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+  }
+
+  // Quitar filtro (barra activa)
+  if(elFilterClear){
+    elFilterClear.addEventListener('click', ()=>{
+      currentQuery=''; currentCity='';
+      if(elSearchText) elSearchText.value='';
+      if(elSearchCity) elSearchCity.value='';
+      setFilter('todas', false);
     });
-  });
+  }
+
+  // Buscador del hero: clic explícito
+  if(elBtnSearch){
+    elBtnSearch.addEventListener('click', ()=> runSearch(true));
+  }
+
+  // Búsqueda en vivo mientras se escribe (con pequeño retraso)
+  const liveSearch = debounce(()=> runSearch(false), 220);
+  if(elSearchText){
+    elSearchText.addEventListener('input', liveSearch);
+    elSearchText.addEventListener('keydown', e=>{ if(e.key === 'Enter') runSearch(true); });
+  }
+  if(elSearchCity){
+    elSearchCity.addEventListener('change', ()=> runSearch(true));
+  }
 
   render();
 })();
