@@ -23,7 +23,7 @@
     {name:"Dr. Andrés Beltrán", category:"cardiologia", city:"Monterrey", rating:4.8, sponsored:true, avail:"Agenda esta semana"},
     {name:"Dra. Lucía Paredes", category:"cardiologia", city:"CDMX", rating:4.7, sponsored:false, avail:"Disponible"},
 
-    {name:"Dra. Valeria Nuño", category:"pediatria", city:"Querétaro", rating:4.9, sponsored:true, avail:"Disponible"},
+    {name:"Dra. Valeria Nuño", category:"pediatria", city:"San Juan del Río, Querétaro", rating:4.9, sponsored:true, avail:"Disponible"},
     {name:"Dr. Sebastián Rojo", category:"pediatria", city:"Guadalajara", rating:4.6, sponsored:false, avail:"Disponible"},
 
     {name:"Dr. Rodrigo Villaseñor", category:"dermatologia", city:"CDMX", rating:4.7, sponsored:true, avail:"Disponible"},
@@ -45,7 +45,7 @@
     {name:"Lic. Iván Cárdenas", category:"psico-clinica", city:"En línea", rating:4.6, sponsored:false, avail:"Disponible"},
     {name:"Lic. Sofía Bravo", category:"psico-clinica", city:"CDMX", rating:4.5, sponsored:false, avail:"Agenda esta semana"},
 
-    {name:"Lic. Natalia Ochoa", category:"psico-infantil", city:"Querétaro", rating:4.9, sponsored:true, avail:"Disponible"},
+    {name:"Lic. Natalia Ochoa", category:"psico-infantil", city:"San Juan del Río, Querétaro", rating:4.9, sponsored:true, avail:"Disponible"},
     {name:"Lic. Bruno Cetina", category:"psico-infantil", city:"En línea", rating:4.6, sponsored:false, avail:"Disponible"},
 
     {name:"Dra. Camila Rueda", category:"psiquiatria", city:"CDMX", rating:4.9, sponsored:true, avail:"Disponible"},
@@ -57,6 +57,24 @@
   ];
 
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+  // Compara dos palabras de forma flexible: acepta que difieran en las últimas
+  // letras (psicologo/psicologa/psicologia, pediatra/pediatria, cardiologo/cardiologia...)
+  function wordsClose(a, b){
+    if(!a || !b) return false;
+    if(a === b || a.includes(b) || b.includes(a)) return true;
+    const minLen = Math.min(a.length, b.length);
+    if(minLen < 4) return false;
+    const prefixLen = Math.max(4, minLen - 2);
+    return a.slice(0, prefixLen) === b.slice(0, prefixLen);
+  }
+
+  // ¿Todas las palabras de la búsqueda aparecen (de forma flexible) en el texto?
+  function fuzzyMatch(text, query){
+    const textWords = norm(text).split(/\s+/).filter(Boolean);
+    const queryWords = norm(query).split(/\s+/).filter(Boolean);
+    return queryWords.every(qw => textWords.some(tw => wordsClose(tw, qw)));
+  }
 
   const grid = document.getElementById('resultados-grid');
   const emptyMsg = document.getElementById('resultados-empty');
@@ -85,8 +103,8 @@
 
     let textOk = true;
     if(currentQuery){
-      const q = norm(currentQuery);
-      textOk = norm(doc.name).includes(q) || norm(CATEGORY_LABELS[doc.category]).includes(q);
+      const haystack = doc.name + ' ' + CATEGORY_LABELS[doc.category];
+      textOk = fuzzyMatch(haystack, currentQuery);
     }
     let cityOk = true;
     if(currentCity){
@@ -147,10 +165,7 @@
       filterBar.classList.add('show');
     }
 
-    // Marcar categoría seleccionada visualmente
-    document.querySelectorAll('.cat-card').forEach(c=>{
-      c.classList.toggle('selected', c.dataset.filter === currentFilter);
-    });
+    // Marcar el pill de categoría seleccionado
     document.querySelectorAll('#quick-pills .pill').forEach(p=>{
       p.classList.toggle('active', p.dataset.filter === currentFilter);
     });
@@ -162,22 +177,9 @@
     if(scroll){ document.getElementById('resultados').scrollIntoView({behavior:'smooth', block:'nearest'}); }
   }
 
-  // Pills del hero
+  // Pills de categoría (bajo la barra de búsqueda)
   document.querySelectorAll('#quick-pills .pill').forEach(btn=>{
     btn.addEventListener('click', ()=> setFilter(btn.dataset.filter, true));
-  });
-
-  // Tarjetas de categoría
-  document.querySelectorAll('.cat-card').forEach(btn=>{
-    btn.addEventListener('click', ()=> setFilter(btn.dataset.filter, true));
-  });
-
-  // "Ver todos los resultados"
-  document.getElementById('btn-ver-todo').addEventListener('click', ()=>{
-    currentQuery=''; currentCity='';
-    document.getElementById('search-text').value='';
-    document.getElementById('search-city').value='';
-    setFilter('todas', true);
   });
 
   // Quitar filtro (barra activa)

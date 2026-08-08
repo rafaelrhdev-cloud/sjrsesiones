@@ -19,8 +19,7 @@
       <span class="brand-name">Vitare</span>
     </div>
     <nav class="nav-links">
-      <a href="#resultados">Profesionales</a>
-      <a href="#categorias">Especialidades</a>
+      <a href="#resultados">Especialidades</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#profesionales">Para profesionales</a>
     </nav>
@@ -44,9 +43,14 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
           <input id="search-text" type="text" placeholder="Ej. psicólogo infantil, cardiólogo, dermatólogo…">
         </div>
-        <div class="search-field" style="max-width:190px;">
+        <div class="search-field city-field" style="max-width:220px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-          <input id="search-city" type="text" placeholder="Ciudad">
+          <select id="search-city">
+            <option value="">Ciudad</option>
+            <option value="San Juan del Río, Querétaro">San Juan del Río, Querétaro</option>
+            <option value="En línea">En línea</option>
+          </select>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <button class="btn btn-primary" id="btn-search">Buscar</button>
       </div>
@@ -54,17 +58,24 @@
       <div class="pills" id="quick-pills">
         <button class="pill active" data-filter="todas">Todas</button>
         <button class="pill" data-filter="general">Medicina general</button>
-        <button class="pill" data-filter="grupo:salud-mental">Psicología</button>
-        <button class="pill" data-filter="psiquiatria">Psiquiatría</button>
+        <button class="pill" data-filter="cardiologia">Cardiología</button>
         <button class="pill" data-filter="pediatria">Pediatría</button>
         <button class="pill" data-filter="dermatologia">Dermatología</button>
+        <button class="pill" data-filter="ortopedia">Ortopedia</button>
+        <button class="pill" data-filter="oftalmologia">Oftalmología</button>
+        <button class="pill" data-filter="odontologia">Odontología</button>
+        <button class="pill" data-filter="ginecologia">Ginecología</button>
+        <button class="pill pill-mental" data-filter="psico-clinica">Psicología clínica</button>
+        <button class="pill pill-mental" data-filter="psico-infantil">Psicología infantil</button>
+        <button class="pill pill-mental" data-filter="psiquiatria">Psiquiatría</button>
+        <button class="pill pill-mental" data-filter="terapia-pareja">Terapia de pareja</button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============ 2. RESULTADOS (dinámico) — justo debajo de los pills, patrocinados primero ============ -->
-<section class="section section-alt" id="resultados" style="padding-top:32px; padding-bottom:0; border-bottom:none;">
+<section class="section section-alt" id="resultados" style="padding-top:32px; padding-bottom:64px; border-bottom:1px solid var(--line);">
   <div class="wrap">
     <div class="section-head">
       <div>
@@ -81,80 +92,6 @@
 
     <div class="pro-row" id="resultados-grid"></div>
     <p id="resultados-empty">No hay profesionales que coincidan con tu búsqueda todavía.</p>
-  </div>
-</section>
-
-<!-- ============ 3. CATEGORIAS — explorar, actualiza los resultados de arriba ============ -->
-<section class="section section-alt" id="categorias" style="padding-top:56px;">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">Explora por categoría</div>
-        <h2>¿Qué tipo de atención buscas?</h2>
-        <p>Toca una categoría para actualizar el listado de arriba — los patrocinados aparecen primero, después el resto.</p>
-      </div>
-      <button class="btn btn-line" data-filter="todas" id="btn-ver-todo">Ver todos los resultados</button>
-    </div>
-
-    <div class="cat-block">
-      <div class="cat-block-label"><span class="dot" style="background:var(--petroleo);"></span><span>Medicina general y especialidades</span></div>
-      <div class="cat-grid" id="grid-medicina">
-        <button class="cat-card" data-filter="general">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4v6a5 5 0 0 0 10 0V4"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><circle cx="19" cy="7" r="2"/></svg></div>
-          <div><div class="cat-name">Medicina general</div><div class="cat-count">312 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="cardiologia">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0 5-8.8 10.4-8.8 10.4S3.2 13.6 3.2 8.6a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z"/></svg></div>
-          <div><div class="cat-name">Cardiología</div><div class="cat-count">84 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="pediatria">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3"/><path d="M6 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></div>
-          <div><div class="cat-name">Pediatría</div><div class="cat-count">146 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="dermatologia">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3c-2 3-3 5-3 8a8 8 0 0 0 16 0c0-3-1-5-3-8"/><path d="M9 12a3 3 0 0 0 6 0"/></svg></div>
-          <div><div class="cat-name">Dermatología</div><div class="cat-count">67 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="ortopedia">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M12 9v7"/><path d="M8 22l4-6 4 6"/></svg></div>
-          <div><div class="cat-name">Ortopedia</div><div class="cat-count">53 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="oftalmologia">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/></svg></div>
-          <div><div class="cat-name">Oftalmología</div><div class="cat-count">39 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="odontologia">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c-3 0-5 2-5 5 0 4 2 6 2 9a1.5 1.5 0 0 0 3 0c0-2 0-3 1-3s1 1 1 3a1.5 1.5 0 0 0 3 0c0-3 2-5 2-9 0-3-2-5-5-5"/></svg></div>
-          <div><div class="cat-name">Odontología</div><div class="cat-count">98 profesionales</div></div>
-        </button>
-        <button class="cat-card" data-filter="ginecologia">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l1 4-2 2 2 3-2 7H10L8 13l2-3-2-2Z"/></svg></div>
-          <div><div class="cat-name">Ginecología</div><div class="cat-count">71 profesionales</div></div>
-        </button>
-      </div>
-    </div>
-
-    <div class="cat-block" style="margin-top:36px;">
-      <div class="cat-block-label"><span class="dot" style="background:var(--coral);"></span><span>Salud mental</span></div>
-      <div class="cat-grid" id="grid-mental">
-        <button class="cat-card mental" data-filter="psico-clinica">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a5.5 5.5 0 0 0-4.6 8.5A5.5 5.5 0 0 0 9.5 21c1 0 2-.3 2.5-.9.5.6 1.5.9 2.5.9a5.5 5.5 0 0 0 4.6-8.5A5.5 5.5 0 0 0 14.5 3c-1 0-2 .3-2.5.9-.5-.6-1.5-.9-2.5-.9Z"/></svg></div>
-          <div><div class="cat-name">Psicología clínica</div><div class="cat-count">204 profesionales</div></div>
-        </button>
-        <button class="cat-card mental" data-filter="psico-infantil">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a5.5 5.5 0 0 0-4.6 8.5A5.5 5.5 0 0 0 9.5 21c1 0 2-.3 2.5-.9.5.6 1.5.9 2.5.9a5.5 5.5 0 0 0 4.6-8.5A5.5 5.5 0 0 0 14.5 3c-1 0-2 .3-2.5.9-.5-.6-1.5-.9-2.5-.9Z"/><circle cx="9" cy="10" r=".6" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r=".6" fill="currentColor" stroke="none"/></svg></div>
-          <div><div class="cat-name">Psicología infantil</div><div class="cat-count">88 profesionales</div></div>
-        </button>
-        <button class="cat-card mental" data-filter="psiquiatria">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="14" rx="4"/><path d="M12 17v4M9 21h6"/></svg></div>
-          <div><div class="cat-name">Psiquiatría</div><div class="cat-count">76 profesionales</div></div>
-        </button>
-        <button class="cat-card mental" data-filter="terapia-pareja">
-          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="3.2"/><circle cx="16" cy="9" r="3.2"/><path d="M3.5 20c.6-3 2.3-5 4.5-5s3.9 2 4.5 5M11.5 20c.6-3 2.3-5 4.5-5s3.9 2 4.5 5"/></svg></div>
-          <div><div class="cat-name">Terapia de pareja</div><div class="cat-count">41 profesionales</div></div>
-        </button>
-      </div>
-    </div>
   </div>
 </section>
 

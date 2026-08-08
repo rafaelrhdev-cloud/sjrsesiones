@@ -119,6 +119,13 @@
   .search-field svg{ width:18px; height:18px; color:var(--musgo); flex-shrink:0; }
   .search-field input{ border:none; outline:none; background:none; font-family:inherit; font-size:0.94rem; color:var(--ink); width:100%; }
   .search-field input::placeholder{ color:var(--ink-faint); }
+  .search-field select{
+    border:none; outline:none; background:none; font-family:inherit; font-size:0.94rem; color:var(--ink);
+    width:100%; appearance:none; -webkit-appearance:none; -moz-appearance:none; cursor:pointer;
+  }
+  .search-field select:invalid, .search-field select option[value=""]{ color:var(--ink-faint); }
+  .city-field{ position:relative; }
+  .city-field .chevron{ width:15px; height:15px; color:var(--ink-faint); flex-shrink:0; pointer-events:none; }
   .search-panel .btn-primary{ padding:0 26px; border-radius:var(--radius-m); border:none; }
 
   .pills{ display:flex; flex-wrap:wrap; gap:9px; margin-top:20px; }
@@ -128,6 +135,9 @@
   }
   .pill:hover{ border-color:var(--petroleo); color:var(--petroleo); }
   .pill.active{ background:var(--petroleo); border-color:var(--petroleo); color:var(--paper); }
+  .pill.pill-mental{ color:var(--coral); border-color:#F2D9CF; }
+  .pill.pill-mental:hover{ border-color:var(--coral); color:var(--coral); }
+  .pill.pill-mental.active{ background:var(--coral); border-color:var(--coral); color:var(--paper); }
 
   .hero-side{ position:relative; display:flex; flex-direction:column; gap:16px; }
   .hero-card{
