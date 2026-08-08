@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitare — Profesionales de salud verificados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#F3F6F4" stroke-width="2" stroke-linecap="round"><path d="M4 12h4l2-7 4 14 2-7h4"/></svg></div>
+      <span class="brand-name">Vitare</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#resultados">Profesionales</a>
+      <a href="#categorias">Especialidades</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#profesionales">Para profesionales</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost">Iniciar sesión</a>
+      <a href="#" class="btn btn-primary">Crear cuenta</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1. HERO — atraer y buscar ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Directorio verificado de salud</div>
+      <h1>Encuentra a tu profesional de salud, <em>ya validado</em>.</h1>
+      <p class="lead">Médicos generales, especialistas, psicólogos y psiquiatras. Cada perfil pasa por una revisión manual de cédula profesional antes de aparecer aquí.</p>
+
+      <div class="search-panel">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="search-text" type="text" placeholder="Ej. psicólogo infantil, cardiólogo, dermatólogo…">
+        </div>
+        <div class="search-field" style="max-width:190px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <input id="search-city" type="text" placeholder="Ciudad">
+        </div>
+        <button class="btn btn-primary" id="btn-search">Buscar</button>
+      </div>
+
+      <div class="pills" id="quick-pills">
+        <button class="pill active" data-filter="todas">Todas</button>
+        <button class="pill" data-filter="general">Medicina general</button>
+        <button class="pill" data-filter="grupo:salud-mental">Psicología</button>
+        <button class="pill" data-filter="psiquiatria">Psiquiatría</button>
+        <button class="pill" data-filter="pediatria">Pediatría</button>
+        <button class="pill" data-filter="dermatologia">Dermatología</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. RESULTADOS (dinámico) — justo debajo de los pills, patrocinados primero ============ -->
+<section class="section section-alt" id="resultados" style="padding-top:32px; padding-bottom:0; border-bottom:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow" id="resultados-eyebrow">Posicionamiento prioritario</div>
+        <h2 id="resultados-title">Profesionales destacados</h2>
+        <p id="resultados-desc">Los perfiles con suscripción activa aparecen primero, marcados como «patrocinado»; después, el resto de profesionales verificados.</p>
+      </div>
+    </div>
+
+    <div class="filter-active-bar" id="filter-bar">
+      <span id="filter-bar-text">Filtrando por: Todas</span>
+      <button id="filter-bar-clear" title="Quitar filtro">✕</button>
+    </div>
+
+    <div class="pro-row" id="resultados-grid"></div>
+    <p id="resultados-empty">No hay profesionales que coincidan con tu búsqueda todavía.</p>
+  </div>
+</section>
+
+<!-- ============ 3. CATEGORIAS — explorar, actualiza los resultados de arriba ============ -->
+<section class="section section-alt" id="categorias" style="padding-top:56px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Explora por categoría</div>
+        <h2>¿Qué tipo de atención buscas?</h2>
+        <p>Toca una categoría para actualizar el listado de arriba — los patrocinados aparecen primero, después el resto.</p>
+      </div>
+      <button class="btn btn-line" data-filter="todas" id="btn-ver-todo">Ver todos los resultados</button>
+    </div>
+
+    <div class="cat-block">
+      <div class="cat-block-label"><span class="dot" style="background:var(--petroleo);"></span><span>Medicina general y especialidades</span></div>
+      <div class="cat-grid" id="grid-medicina">
+        <button class="cat-card" data-filter="general">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4v6a5 5 0 0 0 10 0V4"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><circle cx="19" cy="7" r="2"/></svg></div>
+          <div><div class="cat-name">Medicina general</div><div class="cat-count">312 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="cardiologia">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0 5-8.8 10.4-8.8 10.4S3.2 13.6 3.2 8.6a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z"/></svg></div>
+          <div><div class="cat-name">Cardiología</div><div class="cat-count">84 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="pediatria">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3"/><path d="M6 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></div>
+          <div><div class="cat-name">Pediatría</div><div class="cat-count">146 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="dermatologia">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3c-2 3-3 5-3 8a8 8 0 0 0 16 0c0-3-1-5-3-8"/><path d="M9 12a3 3 0 0 0 6 0"/></svg></div>
+          <div><div class="cat-name">Dermatología</div><div class="cat-count">67 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="ortopedia">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M12 9v7"/><path d="M8 22l4-6 4 6"/></svg></div>
+          <div><div class="cat-name">Ortopedia</div><div class="cat-count">53 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="oftalmologia">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/></svg></div>
+          <div><div class="cat-name">Oftalmología</div><div class="cat-count">39 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="odontologia">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c-3 0-5 2-5 5 0 4 2 6 2 9a1.5 1.5 0 0 0 3 0c0-2 0-3 1-3s1 1 1 3a1.5 1.5 0 0 0 3 0c0-3 2-5 2-9 0-3-2-5-5-5"/></svg></div>
+          <div><div class="cat-name">Odontología</div><div class="cat-count">98 profesionales</div></div>
+        </button>
+        <button class="cat-card" data-filter="ginecologia">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l1 4-2 2 2 3-2 7H10L8 13l2-3-2-2Z"/></svg></div>
+          <div><div class="cat-name">Ginecología</div><div class="cat-count">71 profesionales</div></div>
+        </button>
+      </div>
+    </div>
+
+    <div class="cat-block" style="margin-top:36px;">
+      <div class="cat-block-label"><span class="dot" style="background:var(--coral);"></span><span>Salud mental</span></div>
+      <div class="cat-grid" id="grid-mental">
+        <button class="cat-card mental" data-filter="psico-clinica">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a5.5 5.5 0 0 0-4.6 8.5A5.5 5.5 0 0 0 9.5 21c1 0 2-.3 2.5-.9.5.6 1.5.9 2.5.9a5.5 5.5 0 0 0 4.6-8.5A5.5 5.5 0 0 0 14.5 3c-1 0-2 .3-2.5.9-.5-.6-1.5-.9-2.5-.9Z"/></svg></div>
+          <div><div class="cat-name">Psicología clínica</div><div class="cat-count">204 profesionales</div></div>
+        </button>
+        <button class="cat-card mental" data-filter="psico-infantil">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a5.5 5.5 0 0 0-4.6 8.5A5.5 5.5 0 0 0 9.5 21c1 0 2-.3 2.5-.9.5.6 1.5.9 2.5.9a5.5 5.5 0 0 0 4.6-8.5A5.5 5.5 0 0 0 14.5 3c-1 0-2 .3-2.5.9-.5-.6-1.5-.9-2.5-.9Z"/><circle cx="9" cy="10" r=".6" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r=".6" fill="currentColor" stroke="none"/></svg></div>
+          <div><div class="cat-name">Psicología infantil</div><div class="cat-count">88 profesionales</div></div>
+        </button>
+        <button class="cat-card mental" data-filter="psiquiatria">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="14" rx="4"/><path d="M12 17v4M9 21h6"/></svg></div>
+          <div><div class="cat-name">Psiquiatría</div><div class="cat-count">76 profesionales</div></div>
+        </button>
+        <button class="cat-card mental" data-filter="terapia-pareja">
+          <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="3.2"/><circle cx="16" cy="9" r="3.2"/><path d="M3.5 20c.6-3 2.3-5 4.5-5s3.9 2 4.5 5M11.5 20c.6-3 2.3-5 4.5-5s3.9 2 4.5 5"/></svg></div>
+          <div><div class="cat-name">Terapia de pareja</div><div class="cat-count">41 profesionales</div></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. CONFIANZA — después de explorar, refuerza credibilidad ============ -->
+<section class="section" style="padding-top:64px; padding-bottom:56px;">
+  <div class="wrap">
+    <div class="stats-band">
+      <div class="stat">
+        <div class="sello"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="29" stroke="#D9A441" stroke-width="2" stroke-dasharray="2.6 4.2"/><circle cx="32" cy="32" r="22" fill="#F3F6F4" stroke="#163832" stroke-width="1.4"/><path d="M23 32.5l6 6 12-13" stroke="#163832" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="stat-num">+1,200</div><div class="stat-label">profesionales verificados</div></div>
+      </div>
+      <div class="stat">
+        <div class="sello"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="29" stroke="#D9A441" stroke-width="2" stroke-dasharray="2.6 4.2"/><circle cx="32" cy="32" r="22" fill="#F3F6F4" stroke="#163832" stroke-width="1.4"/><path d="M22 34c2-8 6-12 10-12s8 4 10 12" stroke="#163832" stroke-width="2.2" stroke-linecap="round"/><circle cx="32" cy="26" r="3" fill="#163832"/></svg></div>
+        <div><div class="stat-num">100%</div><div class="stat-label">cédulas revisadas manualmente</div></div>
+      </div>
+      <div class="stat">
+        <div class="sello"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="29" stroke="#D9A441" stroke-width="2" stroke-dasharray="2.6 4.2"/><circle cx="32" cy="32" r="22" fill="#F3F6F4" stroke="#163832" stroke-width="1.4"/><path d="M32 22v10l7 4" stroke="#163832" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="stat-num">48h</div><div class="stat-label">tiempo promedio de validación</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. COMO FUNCIONA (pacientes) ============ -->
+<section class="section" id="como-funciona" style="padding-top:0;">
+  <div class="wrap">
+    <div class="how-wrap">
+      <div>
+        <div class="eyebrow on-dark">Para quienes buscan atención</div>
+        <h2>Tres pasos, sin vueltas.</h2>
+        <p class="lead">Diseñado para que encuentres a la persona correcta sin perderte entre perfiles sin revisar.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><div><div class="step-title">Filtra por categoría y ciudad</div><div class="step-desc">Medicina general, una especialidad puntual, o salud mental — tú eliges el punto de partida.</div></div></div>
+        <div class="step"><div class="step-num">02</div><div><div class="step-title">Revisa perfiles ya verificados</div><div class="step-desc">Cédula profesional confirmada, especialidad, reseñas y disponibilidad, todo en un solo lugar.</div></div></div>
+        <div class="step"><div class="step-num">03</div><div><div class="step-title">Agenda directamente</div><div class="step-desc">Contacta o reserva tu cita sin intermediarios ni formularios repetidos.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. PARA PROFESIONALES ============ -->
+<section class="section section-alt" id="profesionales">
+  <div class="wrap pro-section">
+    <div class="pro-copy">
+      <div class="eyebrow">Para psicólogos, psiquiatras y médicos</div>
+      <h2>Tu perfil, validado por un equipo real.</h2>
+      <p>Regístrate, sube tu cédula profesional y los documentos que te solicitemos. Un administrador revisa cada solicitud antes de publicarla — nada aparece sin pasar por esa revisión.</p>
+      <p>Una vez validado, puedes activar una <strong style="color:var(--petroleo);">suscripción destacada</strong>: nuestro equipo posiciona tu perfil entre los primeros resultados durante 3 meses.</p>
+      <div class="btn-group">
+        <a href="#" class="btn btn-primary">Registrarme como profesional</a>
+        <a href="#" class="btn btn-line">Ver requisitos</a>
+      </div>
+    </div>
+
+    <div class="pro-visual">
+      <div class="pro-flow">
+        <div class="flow-step">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div><div class="flow-title">Crea tu cuenta profesional</div><div class="flow-desc">Datos básicos y la categoría en la que ejerces.</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"/><path d="M6 3h8l5 5v13H6z"/><path d="M9 13h6M9 17h6"/></svg></div>
+          <div><div class="flow-title">Sube tu cédula y documentos</div><div class="flow-desc">Cédula profesional y cualquier documento adicional que se te solicite.</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div><div class="flow-title">Espera la validación</div><div class="flow-desc">Un administrador revisa tus documentos antes de publicar tu perfil.</div></div>
+        </div>
+        <div class="flow-step final">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
+          <div>
+            <div class="flow-title">Activa tu suscripción destacada</div>
+            <div class="flow-desc">Opcional. Un administrador te posiciona entre los primeros resultados.</div>
+            <span class="flow-badge">3 meses en primeras posiciones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand" style="gap:9px;">
+          <div class="brand-mark" style="background:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="#163832" stroke-width="2" stroke-linecap="round"><path d="M4 12h4l2-7 4 14 2-7h4"/></svg></div>
+          <span class="brand-name" style="color:var(--paper);">Vitare</span>
+        </div>
+        <p>Directorio de salud con profesionales verificados: medicina general, especialidades y salud mental.</p>
+      </div>
+      <div><h4>Para pacientes</h4><ul><li><a href="#">Buscar profesionales</a></li><li><a href="#">Especialidades</a></li><li><a href="#">Salud mental</a></li><li><a href="#">Preguntas frecuentes</a></li></ul></div>
+      <div><h4>Para profesionales</h4><ul><li><a href="#">Registrarme</a></li><li><a href="#">Requisitos de validación</a></li><li><a href="#">Suscripción destacada</a></li><li><a href="#">Panel profesional</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="#">Términos de uso</a></li><li><a href="#">Privacidad</a></li><li><a href="#">Aviso para profesionales de salud</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Vitare. Todos los derechos reservados.</span>
+      <span>Hecho para conectar pacientes con profesionales verificados.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
