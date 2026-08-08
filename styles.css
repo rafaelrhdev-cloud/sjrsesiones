@@ -225,11 +225,11 @@
   .sponsor-tag::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--amber);}
   .pro-body{ padding:15px 17px 17px; }
   .pro-name{ font-weight:600; font-size:0.95rem; }
-  .pro-spec{ font-size:0.81rem; color:var(--ink-faint); margin-top:2px; }
+  .pro-spec{ font-size:0.81rem; color:var(--ink-faint); margin-top:2px; line-height:1.4; }
   .pro-meta{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid var(--line-soft); }
   .pro-rating{ display:flex; align-items:center; gap:5px; font-size:0.79rem; font-weight:600; color:var(--petroleo);}
   .pro-rating svg{ width:12px; height:12px; color:var(--amber); }
-  .pro-city{ font-size:0.76rem; color:var(--ink-faint); }
+  .pro-city{ font-size:0.76rem; color:var(--musgo); font-weight:500; margin-top:3px; }
   #resultados-empty{ display:none; color:var(--ink-faint); margin-top:8px; font-size:0.92rem; }
 
   /* ===== COMO FUNCIONA ===== */

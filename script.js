@@ -1,5 +1,5 @@
 (function(){
-  // ---------- Datos de ejemplo (prototipo) ----------
+  // ---------- Catálogo de categorías ----------
   const CATEGORY_LABELS = {
     "general":"Medicina general", "cardiologia":"Cardiología", "pediatria":"Pediatría",
     "dermatologia":"Dermatología", "ortopedia":"Ortopedia", "oftalmologia":"Oftalmología",
@@ -7,7 +7,28 @@
     "psico-clinica":"Psicología clínica", "psico-infantil":"Psicología infantil",
     "psiquiatria":"Psiquiatría", "terapia-pareja":"Terapia de pareja"
   };
-  const MENTAL_GROUP = ["psico-clinica","psico-infantil","psiquiatria","terapia-pareja"];
+
+  // Sinónimos/variantes de búsqueda por categoría (ya sin acentos). Esto reemplaza
+  // cualquier heurística "difusa" genérica -- solo se compara contra esta lista
+  // curada, así que términos de una categoría nunca disparan otra por accidente.
+  const SERVICE_KEYWORDS = {
+    "general": ["general", "medico", "medicina"],
+    "cardiologia": ["cardiologia", "cardiologo", "cardiologa", "corazon"],
+    "pediatria": ["pediatria", "pediatra", "nino", "ninos"],
+    "dermatologia": ["dermatologia", "dermatologo", "dermatologa", "piel"],
+    "ortopedia": ["ortopedia", "ortopedista", "hueso", "huesos", "fractura"],
+    "oftalmologia": ["oftalmologia", "oftalmologo", "oftalmologa", "ojos", "vista"],
+    "odontologia": ["odontologia", "odontologo", "odontologa", "dentista", "dientes"],
+    "ginecologia": ["ginecologia", "ginecologo", "ginecologa"],
+    "psico-clinica": ["psicologia", "psicologo", "psicologa", "terapia", "terapeuta"],
+    "psico-infantil": ["infantil", "nino", "ninos", "psicologia", "psicologo", "psicologa"],
+    "psiquiatria": ["psiquiatria", "psiquiatra"],
+    "terapia-pareja": ["pareja", "parejas", "matrimonio", "matrimonial", "terapia"]
+  };
+
+  const MODALITY_SJR = "San Juan del Río, Querétaro";
+  const MODALITY_ONLINE = "En línea";
+
   const GRADIENTS = [
     "linear-gradient(150deg,#EAF0EC, var(--musgo) 140%)",
     "linear-gradient(150deg,#EAF0EC, var(--coral) 140%)",
@@ -15,65 +36,69 @@
     "linear-gradient(150deg,#EAF0EC, var(--amber) 140%)"
   ];
 
+  // ---------- Datos de ejemplo (prototipo) ----------
+  // Por ahora solo operamos en San Juan del Río, Qro. y en línea.
+  // Un profesional puede tener uno o varios "services" (categorías que atiende)
+  // y una o ambas modalidades.
   const doctors = [
-    {name:"Dr. Mauricio Elizondo", category:"general", city:"CDMX", rating:4.8, sponsored:true, avail:"Disponible"},
-    {name:"Dra. Fernanda Ibarra", category:"general", city:"Puebla", rating:4.6, sponsored:false, avail:"Disponible"},
-    {name:"Dr. Samuel Quezada", category:"general", city:"En línea", rating:4.5, sponsored:false, avail:"Agenda esta semana"},
+    {name:"Dr. Mauricio Elizondo", services:["general"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.8, sponsored:true},
+    {name:"Dra. Fernanda Ibarra", services:["general"], modalities:[MODALITY_SJR], rating:4.6, sponsored:false},
 
-    {name:"Dr. Andrés Beltrán", category:"cardiologia", city:"Monterrey", rating:4.8, sponsored:true, avail:"Agenda esta semana"},
-    {name:"Dra. Lucía Paredes", category:"cardiologia", city:"CDMX", rating:4.7, sponsored:false, avail:"Disponible"},
+    {name:"Dr. Andrés Beltrán", services:["cardiologia"], modalities:[MODALITY_SJR], rating:4.8, sponsored:true},
+    {name:"Dra. Lucía Paredes", services:["cardiologia"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.7, sponsored:false},
 
-    {name:"Dra. Valeria Nuño", category:"pediatria", city:"San Juan del Río, Querétaro", rating:4.9, sponsored:true, avail:"Disponible"},
-    {name:"Dr. Sebastián Rojo", category:"pediatria", city:"Guadalajara", rating:4.6, sponsored:false, avail:"Disponible"},
+    {name:"Dra. Valeria Nuño", services:["pediatria"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.9, sponsored:true},
+    {name:"Dr. Sebastián Rojo", services:["pediatria"], modalities:[MODALITY_SJR], rating:4.6, sponsored:false},
 
-    {name:"Dr. Rodrigo Villaseñor", category:"dermatologia", city:"CDMX", rating:4.7, sponsored:true, avail:"Disponible"},
-    {name:"Dra. Ximena Corral", category:"dermatologia", city:"Mérida", rating:4.5, sponsored:false, avail:"Agenda esta semana"},
+    {name:"Dr. Rodrigo Villaseñor", services:["dermatologia"], modalities:[MODALITY_SJR], rating:4.7, sponsored:true},
+    {name:"Dra. Ximena Corral", services:["dermatologia"], modalities:[MODALITY_ONLINE], rating:4.5, sponsored:false},
 
-    {name:"Dr. Tomás Ferreira", category:"ortopedia", city:"Monterrey", rating:4.6, sponsored:false, avail:"Disponible"},
-    {name:"Dra. Paola Guzmán", category:"ortopedia", city:"CDMX", rating:4.4, sponsored:false, avail:"Disponible"},
+    {name:"Dr. Tomás Ferreira", services:["ortopedia"], modalities:[MODALITY_SJR], rating:4.6, sponsored:false},
+    {name:"Dra. Paola Guzmán", services:["ortopedia"], modalities:[MODALITY_SJR], rating:4.4, sponsored:false},
 
-    {name:"Dra. Marcela Trejo", category:"oftalmologia", city:"Puebla", rating:4.7, sponsored:false, avail:"Disponible"},
-    {name:"Dr. Emilio Nava", category:"oftalmologia", city:"En línea", rating:4.5, sponsored:false, avail:"Agenda esta semana"},
+    {name:"Dra. Marcela Trejo", services:["oftalmologia"], modalities:[MODALITY_SJR], rating:4.7, sponsored:false},
+    {name:"Dr. Emilio Nava", services:["oftalmologia"], modalities:[MODALITY_ONLINE], rating:4.5, sponsored:false},
 
-    {name:"Dra. Ana Bustamante", category:"odontologia", city:"CDMX", rating:4.8, sponsored:true, avail:"Disponible"},
-    {name:"Dr. Héctor Salinas", category:"odontologia", city:"Toluca", rating:4.5, sponsored:false, avail:"Disponible"},
+    {name:"Dra. Ana Bustamante", services:["odontologia"], modalities:[MODALITY_SJR], rating:4.8, sponsored:true},
+    {name:"Dr. Héctor Salinas", services:["odontologia"], modalities:[MODALITY_SJR], rating:4.5, sponsored:false},
 
-    {name:"Dra. Isabel Montano", category:"ginecologia", city:"Guadalajara", rating:4.8, sponsored:true, avail:"Disponible"},
-    {name:"Dra. Carla Reséndiz", category:"ginecologia", city:"CDMX", rating:4.6, sponsored:false, avail:"Agenda esta semana"},
+    {name:"Dra. Isabel Montano", services:["ginecologia"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.8, sponsored:true},
+    {name:"Dra. Carla Reséndiz", services:["ginecologia"], modalities:[MODALITY_SJR], rating:4.6, sponsored:false},
 
-    {name:"Lic. Diego Márquez", category:"psico-clinica", city:"En línea", rating:5.0, sponsored:true, avail:"Disponible"},
-    {name:"Lic. Iván Cárdenas", category:"psico-clinica", city:"En línea", rating:4.6, sponsored:false, avail:"Disponible"},
-    {name:"Lic. Sofía Bravo", category:"psico-clinica", city:"CDMX", rating:4.5, sponsored:false, avail:"Agenda esta semana"},
+    {name:"Lic. Diego Márquez", services:["psico-clinica"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:5.0, sponsored:true},
+    {name:"Lic. Iván Cárdenas", services:["psico-clinica","terapia-pareja"], modalities:[MODALITY_ONLINE], rating:4.6, sponsored:false},
+    {name:"Lic. Sofía Bravo", services:["psico-clinica"], modalities:[MODALITY_SJR], rating:4.5, sponsored:false},
 
-    {name:"Lic. Natalia Ochoa", category:"psico-infantil", city:"San Juan del Río, Querétaro", rating:4.9, sponsored:true, avail:"Disponible"},
-    {name:"Lic. Bruno Cetina", category:"psico-infantil", city:"En línea", rating:4.6, sponsored:false, avail:"Disponible"},
+    {name:"Lic. Natalia Ochoa", services:["psico-infantil","terapia-pareja"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.9, sponsored:true},
+    {name:"Lic. Bruno Cetina", services:["psico-infantil"], modalities:[MODALITY_ONLINE], rating:4.6, sponsored:false},
 
-    {name:"Dra. Camila Rueda", category:"psiquiatria", city:"CDMX", rating:4.9, sponsored:true, avail:"Disponible"},
-    {name:"Dra. Renata Solís", category:"psiquiatria", city:"Guadalajara", rating:4.7, sponsored:false, avail:"Disponible"},
-    {name:"Dr. Emiliano Cabral", category:"psiquiatria", city:"En línea", rating:4.5, sponsored:false, avail:"Agenda esta semana"},
+    {name:"Dra. Camila Rueda", services:["psiquiatria"], modalities:[MODALITY_SJR], rating:4.9, sponsored:true},
+    {name:"Dra. Renata Solís", services:["psiquiatria"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.7, sponsored:false},
+    {name:"Dr. Emiliano Cabral", services:["psiquiatria"], modalities:[MODALITY_ONLINE], rating:4.5, sponsored:false},
 
-    {name:"Lic. Daniela Puente", category:"terapia-pareja", city:"En línea", rating:4.8, sponsored:true, avail:"Disponible"},
-    {name:"Lic. Gabriel Ontiveros", category:"terapia-pareja", city:"Monterrey", rating:4.5, sponsored:false, avail:"Disponible"}
+    {name:"Lic. Daniela Puente", services:["terapia-pareja"], modalities:[MODALITY_SJR, MODALITY_ONLINE], rating:4.8, sponsored:true},
+    {name:"Lic. Gabriel Ontiveros", services:["terapia-pareja","psico-clinica"], modalities:[MODALITY_SJR], rating:4.5, sponsored:false}
   ];
 
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 
-  // Compara dos palabras de forma flexible: acepta que difieran en las últimas
-  // letras (psicologo/psicologa/psicologia, pediatra/pediatria, cardiologo/cardiologia...)
-  function wordsClose(a, b){
-    if(!a || !b) return false;
-    if(a === b || a.includes(b) || b.includes(a)) return true;
-    const minLen = Math.min(a.length, b.length);
-    if(minLen < 4) return false;
-    const prefixLen = Math.max(4, minLen - 2);
-    return a.slice(0, prefixLen) === b.slice(0, prefixLen);
+  // ¿La palabra de búsqueda aparece (razonablemente) en alguna de las palabras del texto?
+  // Solo substring en cualquier dirección -- sin heurísticas de prefijo que puedan
+  // confundir palabras distintas (p.ej. "pareja" con "Paredes").
+  function wordIn(word, textWords){
+    return textWords.some(tw => tw === word || (word.length >= 3 && tw.includes(word)) || (tw.length >= 3 && word.includes(tw)));
   }
 
-  // ¿Todas las palabras de la búsqueda aparecen (de forma flexible) en el texto?
-  function fuzzyMatch(text, query){
-    const textWords = norm(text).split(/\s+/).filter(Boolean);
+  // La búsqueda solo coincide por NOMBRE del profesional o por SERVICIO que ofrece
+  // (usando el diccionario curado de sinónimos), nunca combinando ambos de forma difusa.
+  function matchesQuery(doc, query){
     const queryWords = norm(query).split(/\s+/).filter(Boolean);
-    return queryWords.every(qw => textWords.some(tw => wordsClose(tw, qw)));
+    if(queryWords.length === 0) return true;
+
+    const nameWords = norm(doc.name).split(/\s+/).filter(Boolean);
+    const serviceWords = doc.services.flatMap(s => (SERVICE_KEYWORDS[s] || []).concat(norm(CATEGORY_LABELS[s]).split(/\s+/)));
+
+    return queryWords.every(qw => wordIn(qw, nameWords) || wordIn(qw, serviceWords));
   }
 
   const grid = document.getElementById('resultados-grid');
@@ -96,20 +121,9 @@
   }
 
   function matches(doc){
-    let catOk = true;
-    if(currentFilter === 'todas'){ catOk = true; }
-    else if(currentFilter === 'grupo:salud-mental'){ catOk = MENTAL_GROUP.includes(doc.category); }
-    else { catOk = doc.category === currentFilter; }
-
-    let textOk = true;
-    if(currentQuery){
-      const haystack = doc.name + ' ' + CATEGORY_LABELS[doc.category];
-      textOk = fuzzyMatch(haystack, currentQuery);
-    }
-    let cityOk = true;
-    if(currentCity){
-      cityOk = norm(doc.city).includes(norm(currentCity));
-    }
+    const catOk = (currentFilter === 'todas') || doc.services.includes(currentFilter);
+    const textOk = !currentQuery || matchesQuery(doc, currentQuery);
+    const cityOk = !currentCity || doc.modalities.some(m => norm(m) === norm(currentCity));
     return catOk && textOk && cityOk;
   }
 
@@ -122,6 +136,8 @@
     } else {
       emptyMsg.style.display = 'none';
       results.forEach((doc, i)=>{
+        const specLine = doc.services.map(s => CATEGORY_LABELS[s]).join(' · ');
+        const modalityLine = doc.modalities.join(' · ');
         const card = document.createElement('div');
         card.className = 'pro-card';
         card.style.animationDelay = (i * 0.03) + 's';
@@ -131,7 +147,8 @@
           </div>
           <div class="pro-body">
             <div class="pro-name">${doc.name}</div>
-            <div class="pro-spec">${CATEGORY_LABELS[doc.category]} · <span class="pro-city">${doc.city}</span></div>
+            <div class="pro-spec">${specLine}</div>
+            <div class="pro-city">${modalityLine}</div>
             <div class="verified-tag">${checkIcon()}CÉDULA VERIFICADA</div>
             <div class="pro-meta">
               <div class="pro-rating">${starIcon()} ${doc.rating.toFixed(1)}</div>
@@ -150,9 +167,7 @@
       desc.textContent = 'Los perfiles con suscripción activa aparecen primero, marcados como «patrocinado»; después, el resto de profesionales verificados.';
       filterBar.classList.remove('show');
     } else {
-      let label = 'Todas las categorías';
-      if(currentFilter === 'grupo:salud-mental') label = 'Psicología';
-      else if(CATEGORY_LABELS[currentFilter]) label = CATEGORY_LABELS[currentFilter];
+      const label = CATEGORY_LABELS[currentFilter] || 'Todas las categorías';
 
       eyebrow.textContent = 'Resultados filtrados';
       title.textContent = (currentQuery ? `Resultados para “${currentQuery}”` : label) + ` (${count})`;
@@ -160,7 +175,7 @@
 
       let barText = 'Filtrando por: ' + label;
       if(currentQuery) barText += ` · texto “${currentQuery}”`;
-      if(currentCity) barText += ` · ciudad “${currentCity}”`;
+      if(currentCity) barText += ` · modalidad “${currentCity}”`;
       filterBarText.textContent = barText;
       filterBar.classList.add('show');
     }
